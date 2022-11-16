@@ -8,9 +8,6 @@
 import React from 'react';
 import {useContext, useMemo, useRef, useLayoutEffect} from 'react';
 import {__RouterContext} from 'react-router';
-import {ReactReduxContext} from 'react-redux';
-
-import ThemeContext from './shared/ThemeContext';
 
 let rendererModule = {
   status: 'pending',
@@ -35,16 +32,12 @@ export default function lazyLegacyRoot(getLegacyComponent) {
 
     // Populate every contexts we want the legacy subtree to see.
     // Then in src/legacy/createLegacyRoot we will apply them.
-    const theme = useContext(ThemeContext);
     const router = useContext(__RouterContext);
-    const reactRedux = useContext(ReactReduxContext);
     const context = useMemo(
       () => ({
-        theme,
         router,
-        reactRedux,
       }),
-      [theme, router, reactRedux]
+      [router]
     );
 
     // Create/unmount.
