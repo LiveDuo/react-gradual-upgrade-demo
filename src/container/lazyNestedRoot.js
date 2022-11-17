@@ -7,42 +7,27 @@ import React, { useRef, useLayoutEffect } from 'react'
 const readModule = (record, createPromise) => {
   if (record.status === 'fulfilled') {
     return record.result
-  }
-  if (record.status === 'rejected') {
+  } else if (record.status === 'rejected') {
     throw record.result
-  }
-  if (!record.promise) {
+  } else if (!record.promise) {
     record.promise = createPromise().then(
       value => {
-        if (record.status === 'pending') {
-          record.status = 'fulfilled'
-          record.promise = null
-          record.result = value
-        }
+        record.status = 'fulfilled'
+        record.promise = null
+        record.result = value
       },
       error => {
-        if (record.status === 'pending') {
-          record.status = 'rejected'
-          record.promise = null
-          record.result = error
-        }
+        record.status = 'rejected'
+        record.promise = null
+        record.result = error
       }
     )
   }
   throw record.promise
 }
 
-const rendererModule = {
-  status: 'pending',
-  promise: null,
-  result: null,
-}
-
-const componentModule = {
-  status: 'pending',
-  promise: null,
-  result: null,
-}
+const rendererModule = { status: 'pending', promise: null, result: null, }
+const componentModule = { status: 'pending', promise: null, result: null }
 
 const lazyNestedRoot = (getContainerComponent) => {
 
@@ -53,19 +38,15 @@ const lazyNestedRoot = (getContainerComponent) => {
     const rootRef = useRef(null)
 
     useLayoutEffect(() => {
-      if (!rootRef.current) {
-        rootRef.current = createNestedRoot(containerRef.current)
-      }
+      if (!rootRef.current) rootRef.current = createNestedRoot(containerRef.current)
       return () => rootRef.current.unmount()
     }, [createNestedRoot])
 
     useLayoutEffect(() => {
-      if (rootRef.current) {
-        rootRef.current.render(Component, props, {})
-      }
+      if (rootRef.current) rootRef.current.render(Component, props, {})
     }, [Component, props])
 
-    return <div style={{display: 'contents'}} ref={containerRef} />
+    return <div ref={containerRef} />
   }
 }
 export default lazyNestedRoot
