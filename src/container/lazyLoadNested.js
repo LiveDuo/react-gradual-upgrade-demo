@@ -8,8 +8,7 @@ const handlePromise = (record) => [
   error => Object.assign(record, getRecord('rejected', null, error))
 ]
 
-// We use this to Suspend rendering of this component until
-// we fetch the component and the nested React to render it.
+// Suspend render the module until both container and nested are fetched
 const readModule = (record, createPromise) => {
   if (record.status === 'fulfilled') return record.result
   else if (record.status === 'rejected') throw record.result
@@ -22,20 +21,19 @@ const componentModule = getRecord('pending', null, null)
 
 const lazyLoadNested = (getContainerComponent) => {
 
-  return (props) => {
-    const getNestedRender = readModule(rendererModule, () => import('../nested/render')).default
+  return () => {
+    const Nested = readModule(rendererModule, () => import('../nested/render')).default
     const Component = readModule(componentModule, getContainerComponent).default
     const containerRef = useRef(null)
-    const rootRef = useRef(null)
 
     useLayoutEffect(() => {
-      if (!rootRef.current) rootRef.current = getNestedRender(containerRef.current)
-      return () => rootRef.current.unmount()
-    }, [getNestedRender])
+      const ref = containerRef.current
+      return () => Nested.ReactDOM.unmountComponentAtNode(ref)
+    }, [Nested])
 
     useLayoutEffect(() => {
-      if (rootRef.current) rootRef.current.render(Component, props, {})
-    }, [Component, props])
+      if (Nested && Component) Nested.ReactDOM.render(<Component />, containerRef.current)
+    }, [Component, Nested])
 
     return <div ref={containerRef} />
   }
