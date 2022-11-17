@@ -1,6 +1,3 @@
 
-import React from 'react'
-import ReactDOM from 'react-dom'
-
-export { React }
-export { ReactDOM }
+export * as React from 'react'
+export * as ReactDOM from 'react-dom'

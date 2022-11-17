@@ -22,8 +22,9 @@ const componentModule = getRecord('pending', null, null)
 const lazyLoadNested = (getContainerComponent) => {
 
   return () => {
-    const Nested = readModule(rendererModule, () => import('../nested/render')).default
-    const Component = readModule(componentModule, getContainerComponent).default
+    const Nested = readModule(rendererModule, () => import('../nested/render'))
+    const Container = readModule(componentModule, getContainerComponent)
+    const Component = Container.default
     const containerRef = useRef(null)
 
     useLayoutEffect(() => {
