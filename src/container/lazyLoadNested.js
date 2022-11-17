@@ -1,18 +1,16 @@
 
 import React, { useRef, useLayoutEffect } from 'react'
 
-const getRecord = (status, promise, result) => ({ status, promise, result })
-
-const handlePromise = (record) => ((value) => Object.assign(record, getRecord('fulfilled', null, value)))
-
-// Suspend render the module until both container and nested are fetched
+// Lazy render the module until the nested module is fetched
 const readModule = (record, readPromise) => {
   
   if (record.status === 'fulfilled') return record.result
   else if (record.status === 'rejected') throw record.result
 
-  if (!record.promise) record.promise = readPromise().then(handlePromise(record))
-  else throw record.promise
+  if (!record.promise) {
+    record.promise = readPromise()
+      .then((v) => Object.assign(record, { status: 'fulfilled', promise: null, result: v }))
+  } else throw record.promise
 }
 
 const rendererModule = {}
