@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 
 import { findDOMNode } from 'react-dom'
 
-const AboutSection = () => {
+const App = () => {
   
   useEffect(() => {
     findDOMNode(this)
@@ -16,4 +16,4 @@ const AboutSection = () => {
   )
 }
 
-export default AboutSection
+export default App

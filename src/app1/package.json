@@ -1,6 +1,6 @@
 {
+  "name": "app-1",
   "private": true,
-  "name": "react-nesting-example-legacy",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

@@ -1,2 +1,2 @@
 
-import './modern/index';
+import './app2/index';
