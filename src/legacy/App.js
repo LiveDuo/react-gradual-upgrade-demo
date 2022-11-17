@@ -11,7 +11,7 @@ class AboutSection extends Component {
   render() {
     return (
       <div style={{border: '1px dashed black', padding: 20}}>
-        <h4>Rendered by React {React.version}</h4>
+        <h4>Rendered by React v{React.version}</h4>
       </div>
     )
   }

@@ -8,7 +8,7 @@ const LegacyApp = lazyLegacyRoot(() => import('../legacy/App'))
 const AboutPage = () => {
   return (
     <div>
-      <h3>Rendered by React ({React.version}).</h3>
+      <h3>Rendered by React v{React.version}</h3>
       <LegacyApp />
     </div>
   )
