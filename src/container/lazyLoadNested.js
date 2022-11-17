@@ -30,8 +30,10 @@ const lazyLoadNested = (getContainerComponent) => {
     useLayoutEffect(() => {
       const ref = containerRef.current
       const Component = Container.default
-      if (Nested && Component) Nested.ReactDOM.render(<Component />, ref)
-      return () => Nested.ReactDOM.unmountComponentAtNode(ref)
+      const root = Nested.ReactDOM.createRoot(ref)
+
+      if (Component) root.render(<Component/>)
+      return () => root.unmount()
     }, [Container, Nested])
 
     return <div ref={containerRef} />
