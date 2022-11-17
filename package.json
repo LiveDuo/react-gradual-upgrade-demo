@@ -3,22 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react-scripts": "3.4.1"
+    "react-scripts": "^4.0.3"
   },
   "scripts": {
     "postinstall": "run-s install:*",
-    "install:legacy": "cd src/legacy && npm install",
-    "install:modern": "cd src/modern && npm install",
-    "copy:legacy": "cpx 'src/shared/**' 'src/legacy/shared/'",
-    "copy:modern": "cpx 'src/shared/**' 'src/modern/shared/'",
-    "watch:legacy": "cpx 'src/shared/**' 'src/legacy/shared/' --watch --no-initial",
-    "watch:modern": "cpx 'src/shared/**' 'src/modern/shared/' --watch --no-initial",
+    "install:app1": "cd src/app1 && npm install",
+    "install:app2": "cd src/app2 && npm install",
+    "copy:app1": "cpx 'src/shared/**' 'src/app1/shared/'",
+    "copy:app2": "cpx 'src/shared/**' 'src/app2/shared/'",
+    "dev:app1": "cpx 'src/shared/**' 'src/app1/shared/' --watch --no-initial",
+    "dev:app2": "cpx 'src/shared/**' 'src/app2/shared/' --watch --no-initial",
+    "predev": "run-p copy:*",
+    "dev": "run-p start dev:*",
+    "start": "react-scripts start",
     "prebuild": "run-p copy:*",
-    "prestart": "run-p copy:*",
-    "start": "run-p start-app watch:*",
-    "start-app": "react-scripts start",
-    "build": "react-scripts build",
-    "eject": "react-scripts eject"
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"
