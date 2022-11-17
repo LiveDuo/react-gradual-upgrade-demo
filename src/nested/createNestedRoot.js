@@ -2,7 +2,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const createLegacyRoot = (container) => {
+const createNestedRoot = (container) => {
   return {
     render(Component, props) {
       ReactDOM.render(<Component {...props} />, container)
@@ -12,4 +12,4 @@ const createLegacyRoot = (container) => {
     }
   }
 }
-export default createLegacyRoot
+export default createNestedRoot

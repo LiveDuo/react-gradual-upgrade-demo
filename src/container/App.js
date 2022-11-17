@@ -1,16 +1,16 @@
 
 import React, { Suspense } from 'react'
 
-import lazyLegacyRoot from './lazyLegacyRoot'
+import lazyNestedRoot from './lazyNestedRoot'
 
-const LegacyApp = lazyLegacyRoot(() => import('../app1/App'))
+const NestedApp = lazyNestedRoot(() => import('../nested/App'))
 
 const App = () => {
   return (
     <Suspense fallback={null}>
       <div>
         <h3>Rendered by React v{React.version}</h3>
-        <LegacyApp />
+        <NestedApp />
       </div>
     </Suspense>
   );
