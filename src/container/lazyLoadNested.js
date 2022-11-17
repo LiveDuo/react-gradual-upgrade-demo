@@ -3,38 +3,35 @@ import React, { useRef, useLayoutEffect } from 'react'
 
 const getRecord = (status, promise, result) => ({ status, promise, result })
 
-const handlePromise = (record) => [
-  value => Object.assign(record, getRecord('fulfilled', null, value)),
-  error => Object.assign(record, getRecord('rejected', null, error))
-]
+const handlePromise = (record) => ((value) => Object.assign(record, getRecord('fulfilled', null, value)))
 
 // Suspend render the module until both container and nested are fetched
 const readModule = (record, createPromise) => {
+  
   if (record.status === 'fulfilled') return record.result
   else if (record.status === 'rejected') throw record.result
-  else if (!record.promise) record.promise = createPromise().then(...handlePromise(record))
+
+  if (!record.promise) record.promise = createPromise().then(handlePromise(record))
   else throw record.promise
 }
 
-const rendererModule = getRecord('pending', null, null)
-const componentModule = getRecord('pending', null, null)
+const rendererModule = {}
 
-const lazyLoadNested = (getContainerComponent) => {
+const lazyLoadNested = (loadNested) => {
 
   return () => {
     const containerRef = useRef(null)
     
-    const Nested = readModule(rendererModule, () => import('../nested'))
-    const Container = readModule(componentModule, getContainerComponent)
+    const Nested = readModule(rendererModule, loadNested)
     
     useLayoutEffect(() => {
       const ref = containerRef.current
-      const Component = Container.default
+      const Component = Nested.App.default
       const root = Nested.ReactDOM.createRoot(ref)
 
       if (Component) root.render(<Component/>)
       return () => root.unmount()
-    }, [Container, Nested])
+    }, [Nested])
 
     return <div ref={containerRef} />
   }

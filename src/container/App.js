@@ -3,7 +3,7 @@ import React, { Suspense } from 'react'
 
 import lazyLoad from './lazyLoadNested'
 
-const NestedApp = lazyLoad(() => import('../nested/App'))
+const NestedApp = lazyLoad(() => import('../nested'))
 
 const App = () => {
   return (
