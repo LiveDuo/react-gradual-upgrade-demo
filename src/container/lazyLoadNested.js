@@ -6,12 +6,12 @@ const getRecord = (status, promise, result) => ({ status, promise, result })
 const handlePromise = (record) => ((value) => Object.assign(record, getRecord('fulfilled', null, value)))
 
 // Suspend render the module until both container and nested are fetched
-const readModule = (record, createPromise) => {
+const readModule = (record, readPromise) => {
   
   if (record.status === 'fulfilled') return record.result
   else if (record.status === 'rejected') throw record.result
 
-  if (!record.promise) record.promise = createPromise().then(handlePromise(record))
+  if (!record.promise) record.promise = readPromise().then(handlePromise(record))
   else throw record.promise
 }
 
@@ -25,11 +25,12 @@ const lazyLoadNested = (loadNested) => {
     const Nested = readModule(rendererModule, loadNested)
     
     useLayoutEffect(() => {
-      const ref = containerRef.current
-      const Component = Nested.App.default
-      const root = Nested.ReactDOM.createRoot(ref)
-
-      if (Component) root.render(<Component/>)
+      const root = Nested.ReactDOM.createRoot(containerRef.current)
+      
+      if (Nested) {
+        const Component = Nested.App.default
+        root.render(<Component/>)
+      }
       return () => root.unmount()
     }, [Nested])
 
