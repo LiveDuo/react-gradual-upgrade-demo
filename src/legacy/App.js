@@ -1,20 +1,19 @@
 
-import React from 'react'
+import React, { useEffect } from 'react'
 
-import { Component } from 'react'
 import { findDOMNode } from 'react-dom'
 
-class AboutSection extends Component {
-  componentDidMount() {
+const AboutSection = () => {
+  
+  useEffect(() => {
     findDOMNode(this)
-  }
-  render() {
-    return (
-      <div style={{border: '1px dashed black', padding: 20}}>
-        <h4>Rendered by React v{React.version}</h4>
-      </div>
-    )
-  }
+  }, [])
+
+  return (
+    <div style={{border: '1px dashed black', padding: 20}}>
+      <h4>Rendered by React v{React.version}</h4>
+    </div>
+  )
 }
 
 export default AboutSection
