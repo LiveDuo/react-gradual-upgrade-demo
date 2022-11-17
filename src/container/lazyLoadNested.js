@@ -3,21 +3,18 @@ import React, { useRef, useLayoutEffect } from 'react'
 
 const getRecord = (status, promise, result) => ({ status, promise, result })
 
+const handlePromise = (record) => [
+  value => Object.assign(record, getRecord('fulfilled', null, value)),
+  error => Object.assign(record, getRecord('rejected', null, error))
+]
+
 // We use this to Suspend rendering of this component until
 // we fetch the component and the nested React to render it.
 const readModule = (record, createPromise) => {
-  if (record.status === 'fulfilled') {
-    return record.result
-  } else if (record.status === 'rejected') {
-    throw record.result
-  } else if (!record.promise) {
-    record.promise = createPromise().then(
-      value => Object.assign(record, getRecord('fulfilled', null, value)),
-      error => Object.assign(record, getRecord('rejected', null, error))
-    )
-  } else {
-    throw record.promise
-  }
+  if (record.status === 'fulfilled') return record.result
+  else if (record.status === 'rejected') throw record.result
+  else if (!record.promise) record.promise = createPromise().then(...handlePromise(record))
+  else throw record.promise
 }
 
 const rendererModule = getRecord('pending', null, null)
