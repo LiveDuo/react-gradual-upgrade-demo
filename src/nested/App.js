@@ -10,8 +10,8 @@ const App = () => {
   }, [])
 
   return (
-    <div style={{border: '1px dashed black', padding: 20}}>
-      <h4>Rendered by React v{React.version}</h4>
+    <div style={{border: '1px dashed black', width: 300}}>
+      <h3 style={{marginLeft: 20}}>Rendered by React v{React.version}</h3>
     </div>
   )
 }
