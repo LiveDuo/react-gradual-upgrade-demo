@@ -11,8 +11,8 @@ const lazyLoad = (loadNested) => {
     const updateRoot = (m) => {
       const _root = m.ReactDOM.createRoot(containerRef.current)
       
-      const Component = m.App.default
-      _root.render(<Component/>)
+      const App = m.App.default
+      _root.render(<App/>)
 
       setRoot(_root)
     }

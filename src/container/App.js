@@ -3,6 +3,7 @@ import React, { Suspense } from 'react'
 
 import { lazyLoad } from './utils'
 
+// requires exports of ReactDOM and App component
 const NestedApp = lazyLoad(() => import('../nested'))
 
 const App = () => {
