@@ -9,8 +9,8 @@
     "postinstall": "run-s install:*",
     "install:app1": "cd src/app1 && npm install",
     "install:app2": "cd src/app2 && npm install",
-    "dev": "run-p start",
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
+    "start": "serve -s build",
     "build": "react-scripts build"
   },
   "eslintConfig": {
