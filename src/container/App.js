@@ -1,7 +1,7 @@
 
 import React, { Suspense } from 'react'
 
-import { lazyLoad } from './lazyLoadNested'
+import { lazyLoad } from './utils'
 
 const NestedApp = lazyLoad(() => import('../nested'))
 
