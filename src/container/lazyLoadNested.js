@@ -1,7 +1,8 @@
 
 import React, { useRef, useLayoutEffect } from 'react'
 
-// This is similar to React.lazy, but implemented manually.
+const getRecord = (status, promise, result) => ({ status, promise, result })
+
 // We use this to Suspend rendering of this component until
 // we fetch the component and the nested React to render it.
 const readModule = (record, createPromise) => {
@@ -11,36 +12,29 @@ const readModule = (record, createPromise) => {
     throw record.result
   } else if (!record.promise) {
     record.promise = createPromise().then(
-      value => {
-        record.status = 'fulfilled'
-        record.promise = null
-        record.result = value
-      },
-      error => {
-        record.status = 'rejected'
-        record.promise = null
-        record.result = error
-      }
+      value => Object.assign(record, getRecord('fulfilled', null, value)),
+      error => Object.assign(record, getRecord('rejected', null, error))
     )
+  } else {
+    throw record.promise
   }
-  throw record.promise
 }
 
-const rendererModule = { status: 'pending', promise: null, result: null, }
-const componentModule = { status: 'pending', promise: null, result: null }
+const rendererModule = getRecord('pending', null, null)
+const componentModule = getRecord('pending', null, null)
 
-const lazyNestedRoot = (getContainerComponent) => {
+const lazyLoadNested = (getContainerComponent) => {
 
   return (props) => {
-    const createNestedRoot = readModule(rendererModule, () => import('../nested/createNestedRoot')).default
+    const getNestedRender = readModule(rendererModule, () => import('../nested/render')).default
     const Component = readModule(componentModule, getContainerComponent).default
     const containerRef = useRef(null)
     const rootRef = useRef(null)
 
     useLayoutEffect(() => {
-      if (!rootRef.current) rootRef.current = createNestedRoot(containerRef.current)
+      if (!rootRef.current) rootRef.current = getNestedRender(containerRef.current)
       return () => rootRef.current.unmount()
-    }, [createNestedRoot])
+    }, [getNestedRender])
 
     useLayoutEffect(() => {
       if (rootRef.current) rootRef.current.render(Component, props, {})
@@ -49,4 +43,4 @@ const lazyNestedRoot = (getContainerComponent) => {
     return <div ref={containerRef} />
   }
 }
-export default lazyNestedRoot
+export default lazyLoadNested

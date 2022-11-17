@@ -1,9 +1,9 @@
 
 import React, { Suspense } from 'react'
 
-import lazyNestedRoot from './lazyNestedRoot'
+import lazyLoad from './lazyLoadNested'
 
-const NestedApp = lazyNestedRoot(() => import('../nested/App'))
+const NestedApp = lazyLoad(() => import('../nested/App'))
 
 const App = () => {
   return (
@@ -13,6 +13,6 @@ const App = () => {
         <NestedApp />
       </div>
     </Suspense>
-  );
+  )
 }
 export default App
